@@ -32,8 +32,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Publish to NPM
-        run: pnpm pack
+      - name: Pack project and capture filename
+        id: pack
+        run: echo "::set-output name=tarball::$(pnpm pack)"
 
       - name: Upload tarball to release
         uses: actions/upload-release-asset@v1
@@ -41,6 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ env.npm_package_name }}-${{ github.event.release.tag_name }}.tgz
-          asset_name: ${{ env.npm_package_name }}-${{ github.event.release.tag_name }}.tgz
+          asset_path: ./${{ steps.pack.outputs.tarball }}
+          asset_name: ${{ steps.pack.outputs.tarball }}
           asset_content_type: application/gzip
