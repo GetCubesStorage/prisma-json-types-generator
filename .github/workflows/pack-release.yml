@@ -1,4 +1,4 @@
-name: Publish to NPM
+name: Pack Tarball and add to release
 
 on:
   release:
@@ -33,6 +33,14 @@ jobs:
         run: pnpm run build
 
       - name: Publish to NPM
-        run: pnpm publish --access public --no-git-checks
+        run: pnpm pack
+
+      - name: Upload tarball to release
+        uses: actions/upload-release-asset@v1
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./${{ env.npm_package_name }}-${{ github.event.release.tag_name }}.tgz
+          asset_name: ${{ env.npm_package_name }}-${{ github.event.release.tag_name }}.tgz
+          asset_content_type: application/gzip
