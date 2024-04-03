@@ -1,5 +1,9 @@
 name: Pack Tarball and add to release
 
+permissions:
+  contents: read
+  releases: write
+
 on:
   release:
     types: [published]
