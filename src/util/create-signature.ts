@@ -19,9 +19,12 @@ export function createType(
     return 'unknown';
   }
 
+  if (typeof type !== "string")
+    throw new Error("type should be a string");
+  
   // If we should use a type as global type map
   if (config.useType) {
-    return `${config.namespace}.${config.useType}['${JSON.stringify(type)}']`;
+    return `${config.namespace}.${config.useType}['${type}']`;
   }
 
   // Just return the type
