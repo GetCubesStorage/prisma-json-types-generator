@@ -1,8 +1,7 @@
 name: Pack Tarball and add to release
 
 permissions:
-  contents: read
-  releases: write
+  contents: write
 
 on:
   release:
